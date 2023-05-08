@@ -4,9 +4,7 @@
         <!-- this template is passed as a child to UserComponent -->
         <template #userrr="{ user }">
             
-            <div  v-if="user">
-                Logged in as {{ user.isAnonymous }}
-            </div>
+            <UserProfile v-if="user" :user="user" />
             <LoginComponent v-else />
 
         </template>
@@ -19,11 +17,13 @@
 /* eslint-disable */
 import LoginComponent from './LoginComponent.vue';
 import UserComponent from './UserComponent.vue';
+import UserProfile from './UserProfile.vue';
 
 export default {
     components: {
         LoginComponent,
-        UserComponent
+        UserComponent,
+        UserProfile
     }
 }
 
