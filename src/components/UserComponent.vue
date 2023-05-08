@@ -2,7 +2,7 @@
     <!-- HTML -->
 
     <div >
-        <slot nam="user" :user="user"></slot>
+        <slot name="userrr" :user="firebaseUser"></slot>
     </div>
 
     <!-- HTML -->
@@ -13,30 +13,27 @@
 
 import { auth} from '../firebase'
 import { onAuthStateChanged } from 'firebase/auth'
-import { ref } from '@vue/composition-api'
-import { onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
 export default {
     setup() {
 
-        onMounted(() => {
-            const user = ref(null)
+            const firebaseUser = ref(null)
             const unsubscribe = onAuthStateChanged(auth, 
-                firebaseUser => user.value.vaue = firebaseUser
+                user => firebaseUser.value = user
             )
 
             return {
-                user,
+                firebaseUser,
                 unsubscribe
             }
-        })
         
 
-        onUnmounted(() => {
-            this.unsubscribe()
-        })
+    },
+    
+    unmounted() {
+        this.unsubscribe()
     }
-
 
    
 }

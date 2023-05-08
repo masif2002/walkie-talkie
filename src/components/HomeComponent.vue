@@ -1,7 +1,17 @@
 <template>
     <h1>Home Page</h1>
-    <UserComponent v-if="user" />
-    <LoginComponent v-else />
+    <UserComponent>
+        <!-- this template is passed as a child to UserComponent -->
+        <template #userrr="{ user }">
+            
+            <div  v-if="user">
+                Logged in as {{ user.isAnonymous }}
+            </div>
+            <LoginComponent v-else />
+
+        </template>
+
+    </UserComponent> 
 </template>
 
 <script>
