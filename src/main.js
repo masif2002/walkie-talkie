@@ -4,12 +4,14 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 
 import HomeComponent from './components/HomeComponent'
+import ChatRoom from './components/ChatRoom'
 
 import { firebaseApp } from './firebase'
 
 
 const routes = [
-    { path: '/', component: HomeComponent}
+    { path: '/', component: HomeComponent},
+    { path: '/chat/:id', component: ChatRoom,  name: 'chat'},
 ]
 
 // Router Set Up
