@@ -14,7 +14,6 @@
 
 <script>
 // JS
-/* eslint-disable */
 import LoginComponent from './LoginComponent.vue';
 import UserComponent from './UserComponent.vue';
 import UserProfile from './UserProfile.vue';
