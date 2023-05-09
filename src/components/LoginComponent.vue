@@ -5,12 +5,12 @@
     
     <div>
         <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" class="input" required>
+        <input type="email" id="email" v-model="email" class="input" >
     </div>
 
     <div>
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" class="input" required>
+        <input type="password" id="password" v-model="password" class="input" >
     </div>
     
     <div>

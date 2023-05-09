@@ -5,7 +5,7 @@ import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 
 import HomeComponent from './components/HomeComponent'
 
-
+import { firebaseApp } from './firebase'
 
 
 const routes = [
@@ -22,8 +22,11 @@ const router = createRouter({
 const app = createApp(App)
 
 // Firebase Plugin
-app.use(VueFire, {  
-    modules: [VueFireFirestoreOptionsAPI()]
+app.use(VueFire, { 
+    firebaseApp, 
+    modules: [
+        VueFireFirestoreOptionsAPI()
+    ]
 })
 
 app.use(router)

@@ -7,6 +7,9 @@
             <UserProfile v-if="user" :user="user" />
             <LoginComponent v-else />
 
+            <ChatList :userId="user.uid" v-if="user"/>
+
+
         </template>
 
     </UserComponent> 
@@ -17,12 +20,14 @@
 import LoginComponent from './LoginComponent.vue';
 import UserComponent from './UserComponent.vue';
 import UserProfile from './UserProfile.vue';
+import ChatList from './ChatList.vue';
 
 export default {
     components: {
         LoginComponent,
         UserComponent,
-        UserProfile
+        UserProfile,
+        ChatList
     }
 }
 
