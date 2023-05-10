@@ -38,8 +38,10 @@
 <script>
 import UserComponent from './UserComponent.vue'
 import ChatMessage from './ChatMessage.vue'
-import { db } from '../firebase'
-import { collection, addDoc, query, orderBy, limitToLast } from 'firebase/firestore'
+import { db, storage } from '../firebase'
+import { collection, doc, setDoc, query, orderBy, limitToLast } from 'firebase/firestore'
+import { ref, uploadBytes, getDownloadURL } from '@firebase/storage'
+// import { ref } from 'firebase/storage'
 
 export default {
     components: { UserComponent, ChatMessage },
@@ -71,23 +73,40 @@ export default {
             }
         }
     },
-    // firebase: {
-    //     messages: collection(db, 'chats', this.chatId, 'messages')
-    // },
     methods: {
         async addMessage(userId) 
         {
             this.loading = true
 
-            const ref = collection(db, 'chats', this.chatId, 'messages')
-            await addDoc(ref, {
+            const collectionRef = collection(db, 'chats', this.chatId, 'messages')
+            const messageRef = doc(collectionRef) // Creates a doc in the collection
+            const messageId = messageRef.id
+            
+            // For audio message in Firebase Storage
+            let audioURL = null
+            
+            if (this.newAudio) {
+                const storageRef = ref(storage, `chats/${this.chatId}/${messageId}.wav`)
+
+                await uploadBytes(storageRef, this.newAudio).then(() => {
+                    console.log('File Uploaded');
+                })
+
+                audioURL = await getDownloadURL(storageRef)
+            }
+
+            // For Message in Firestore
+            await setDoc(messageRef, {
                 text: this.message,
                 sender: userId,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                audioURL,
             })
+
 
             this.loading = false
             this.message = ''
+            this.newAudio = null
         },
 
         async record () {
