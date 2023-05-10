@@ -14,7 +14,7 @@
             <button 
                 class="button is-success"
                 @click="addMessage(user.uid)"
-                :disabled = "!message || loading"
+                :disabled = "(!message && !newAudio) || loading"
                 :class = "{ 'is-loading' : loading }"
             >
                 Send Message
