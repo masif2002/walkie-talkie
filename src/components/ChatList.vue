@@ -3,9 +3,9 @@
     <hr>
 
 
-    <ChatRoomList :title="'Public Chat Rooms'" :chatRooms="publicChatRooms"/>
+    <ChatRoomList v-if="publicChatRooms" :title="'Public Chat Rooms'" :chatRooms="publicChatRooms"/>
 
-    <ChatRoomList :title="`${userId}'s chat rooms`" :chatRooms="chats">
+    <ChatRoomList v-if="chats" :title="`${userId}'s chat rooms`" :chatRooms="chats">
 
         <template #create-room>
             <button class="button" @click="createRoom()">Create Room</button>
@@ -41,7 +41,7 @@ export default {
             }
         }
     },
-    // Realtime data fetching iwht vueFire but without any dependency (like userId for 'chats')
+    // Realtime data fetching with vueFire but without any dependency (like userId for 'chats')
     firestore: {
         publicChatRooms: collection(db, 'chats')
     },

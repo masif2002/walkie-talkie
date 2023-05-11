@@ -6,12 +6,23 @@ import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 import HomeComponent from './components/HomeComponent'
 import ChatRoom from './components/ChatRoom'
 
-import { firebaseApp } from './firebase'
+import { firebaseApp, auth } from './firebase'
 
 
 const routes = [
-    { path: '/', component: HomeComponent},
-    { path: '/chat/:id', component: ChatRoom,  name: 'chat'},
+    { 
+        path: '/', 
+        component: HomeComponent,
+        name: 'home'
+    },
+    { 
+        path: '/chat/:id', 
+        component: ChatRoom, 
+        name: 'chat',
+        beforeEnter: () => {
+            if (!auth.currentUser) return { name: 'home' }
+        }
+    },
 ]
 
 // Router Set Up
