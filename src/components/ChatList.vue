@@ -2,38 +2,34 @@
     <h2>Chat Rooms</h2>
     <hr>
 
-    <div v-if="publicChatRoom">
-        <h3>Public ChatRooms</h3>
-        <ul>
-            <li v-for="room of publicChatRoom" :key="room?.id">
-                <router-link :to="{name: 'chat', params: {id: room.id}}">{{ room.id }}</router-link>
-            </li>
-        </ul>
-    </div>
+
+    <ChatRoomList :title="'Public Chat Rooms'" :chatRooms="publicChatRooms"/>
+
+    <ChatRoomList :title="`${userId}'s chat rooms`" :chatRooms="chats">
+
+        <template #create-room>
+            <button class="button" @click="createRoom()">Create Room</button>
+        </template>
+
+    </ChatRoomList>
 
 
-    <div v-if="chats">
-        <h3>Private ChatRooms</h3>
-        <ul>
-            <li v-for="chat of chats" :key="chat.id">
-                <router-link :to="{name: 'chat', params: {id: chat.id}}">{{ chat.id }}</router-link>
-            </li>
-        </ul>
-    </div>
-
-    <button class="button" @click="createRoom()">Create Room</button>
 </template>
 
 
 <script>
 import { db } from '../firebase'
 import { addDoc, collection, query, where } from 'firebase/firestore'
+import ChatRoomList from './ChatRoomList.vue'
 
 export default {
     props: ['userId'],
+    components: {
+        ChatRoomList
+    },
     data () {return {
         chats: [],
-        publicChatRoom: []
+        publicChatRooms: []
     }},
     // Realtime Data fetching using VueFire
     watch: {
@@ -47,7 +43,7 @@ export default {
     },
     // Realtime data fetching iwht vueFire but without any dependency (like userId for 'chats')
     firestore: {
-        publicChatRoom: collection(db, 'chats')
+        publicChatRooms: collection(db, 'chats')
     },
     methods: {
         async createRoom() {
