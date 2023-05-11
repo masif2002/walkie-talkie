@@ -1,19 +1,20 @@
 <template>
     <p>Welcome to chat room <strong>{{ chatId }}</strong></p>
+    <p>Use this link to join the ChatRoom: <pre>{{ chatRoomURL }}</pre></p>
 
     <UserComponent >
         <template #userrr="{ user }">
 
             <ul>
                 <li v-for="message of messages" :key="message.id">
-                    <ChatMessage :message="message" :owner="message.sender === user.uid"/>
+                    <ChatMessage :message="message" :owner="message.sender === user?.uid"/>
                 </li>
             </ul>
 
             <input type="text" v-model="message" />
             <button 
                 class="button is-success"
-                @click="addMessage(user.uid)"
+                @click="addMessage(user?.uid)"
                 :disabled = "(!message && !newAudio) || loading"
                 :class = "{ 'is-loading' : loading }"
             >
@@ -55,6 +56,9 @@ export default {
         }
     },
     computed: {
+        chatRoomURL() {
+            return document.URL
+        },
         chatId() {
             return this.$route.params.id
         },
