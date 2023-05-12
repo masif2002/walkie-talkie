@@ -46,7 +46,7 @@ export default {
     },
     // Realtime data fetching with vueFire but without any dependency (like userId for 'chats')
     firestore: {
-        publicChatRooms: collection(db, 'chats')
+        publicChatRooms: query(collection(db, 'chats'), where('public', '==', true))
     },
     methods: {
         async createRoom() {
