@@ -7,6 +7,7 @@ import HomeComponent from './components/HomeComponent'
 import ChatRoom from './components/ChatRoom'
 
 import { firebaseApp, auth } from './firebase'
+import { roomExists } from './utils'
 
 
 const routes = [
@@ -19,8 +20,14 @@ const routes = [
         path: '/chat/:id', 
         component: ChatRoom, 
         name: 'chat',
-        beforeEnter: () => {
+        beforeEnter: async (to) => {
             if (!auth.currentUser) return { name: 'home' }
+            
+            const room = await roomExists(to.params.id)  
+            if (!room) {
+                alert('Incorrect Room ID')
+                return { name: 'home' }
+            }    
         }
     },
 ]

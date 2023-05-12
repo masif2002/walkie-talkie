@@ -2,6 +2,7 @@
     <h2>Chat Rooms</h2>
     <hr>
 
+    <JoinRoom />
 
     <ChatRoomList v-if="publicChatRooms" :title="'Public Chat Rooms'" :chatRooms="publicChatRooms"/>
 
@@ -21,11 +22,13 @@
 import { db } from '../firebase'
 import { addDoc, collection, query, where } from 'firebase/firestore'
 import ChatRoomList from './ChatRoomList.vue'
+import JoinRoom from './JoinRoom.vue'
 
 export default {
     props: ['userId'],
     components: {
-        ChatRoomList
+        ChatRoomList,
+        JoinRoom
     },
     data () {return {
         chats: [],

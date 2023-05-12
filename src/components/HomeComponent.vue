@@ -9,7 +9,6 @@
 
             <ChatList :userId="user.uid" v-if="user"/>
 
-
         </template>
 
     </UserComponent> 

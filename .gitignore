@@ -22,5 +22,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-ts.txt
+ts.md
 .gitignore
