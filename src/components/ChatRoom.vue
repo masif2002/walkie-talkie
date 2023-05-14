@@ -6,7 +6,7 @@
         <template #userrr="{ user }">
 
             <ul ref="container">
-                <button class="button" @click="loadMore()">Load more messages...</button>
+                <button class="button" @click="loadMore()" v-if="!noMoreMessages">Load more messages...</button>
                 <li v-for="message of messages" :key="message.id">
                     <ChatMessage :message="message" :owner="message.sender === user?.uid"/>
                 </li>
@@ -41,7 +41,7 @@
 import UserComponent from './UserComponent.vue'
 import ChatMessage from './ChatMessage.vue'
 import { db, storage } from '../firebase'
-import { collection, doc, setDoc, query, orderBy, limitToLast } from 'firebase/firestore'
+import { collection, doc, setDoc, query, orderBy, limitToLast, getCountFromServer } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage'
 // import { ref } from 'firebase/storage'
 
@@ -55,6 +55,7 @@ export default {
             newAudio: null,
             recorder: null,
             numberOfMessages: 10,
+            totalMessages: 0
         }
     },
     computed: {
@@ -67,23 +68,34 @@ export default {
         newAudioURL() {
             // Creates a new URL for blob file 
             return URL.createObjectURL(this.newAudio)
+        },
+        noMoreMessages() {
+            return this.numberOfMessages >= this.totalMessages
         }
     },
     watch: {
         numberOfMessages: {
             handler() {
+                // Logic for fixing scroll when retrieving old messages
+                const msgContainer = this.$refs.container
+                const initialHeight = msgContainer.scrollHeight
+
                 this.fetchMessages(this.chatId)
+                    .then(() => msgContainer.scrollTop = msgContainer.scrollHeight - initialHeight)
             },
         },
     },
     mounted() {
+        this.getTotalMessages()
+
         this.fetchMessages(this.chatId)
             .then(() => this.displayLastMessage())
     },
     methods: {
         // Fetch Messages
-        async fetchMessages(chatId) {
+        async fetchMessages(chatId) {9999
             const collectionRef =  collection(db, 'chats', chatId, 'messages')
+
             // Realtime data stream using VueFire
             return this.$firestoreBind('messages', query(collectionRef, orderBy('createdAt'), limitToLast(this.numberOfMessages)))
         },
@@ -162,11 +174,24 @@ export default {
         // Load more messages
         loadMore() {
             this.numberOfMessages += 10
+            
+            this.getTotalMessages()
+        },
+
+        async getTotalMessages() {
+            const collectionRef =  collection(db, 'chats', this.chatId, 'messages')
+            const snapshot = await getCountFromServer(collectionRef)
+            this.totalMessages = snapshot.data().count
         },
 
         displayLastMessage () {
             const msgContainer = this.$refs.container
+
+            msgContainer.classList.add('smooth-scroll')
+
             msgContainer.scrollTo(0, msgContainer.scrollHeight)
+
+            msgContainer.classList.remove('smooth-scroll')
         }
 
     }
@@ -185,10 +210,13 @@ ul {
   border-radius: 0;
   height: 500px;
   overflow-y: scroll;
-  scroll-behavior: smooth;
 }
 
 li {
   display: flex;
+}
+
+.smooth-scroll {
+    scroll-behavior: smooth;
 }
 </style>
