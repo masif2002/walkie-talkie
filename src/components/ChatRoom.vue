@@ -8,14 +8,14 @@
             <ul ref="container">
                 <button class="button" @click="loadMore()" v-if="!noMoreMessages">Load more messages...</button>
                 <li v-for="message of messages" :key="message.id">
-                    <ChatMessage :message="message" :owner="message.sender === user?.uid"/>
+                    <ChatMessage :message="message" :owner="message.sender === user?.email"/>
                 </li>
             </ul>
 
             <input type="text" v-model="message" />
             <button 
                 class="button is-success"
-                @click="addMessage(user?.uid)"
+                @click="addMessage(user?.email)"
                 :disabled = "(!message && !newAudio) || loading"
                 :class = "{ 'is-loading' : loading }"
             >
@@ -55,7 +55,7 @@ export default {
             newAudio: null,
             recorder: null,
             numberOfMessages: 10,
-            totalMessages: 0
+            totalMessages: 0,
         }
     },
     computed: {
@@ -71,7 +71,7 @@ export default {
         },
         noMoreMessages() {
             return this.numberOfMessages >= this.totalMessages
-        }
+        },
     },
     watch: {
         numberOfMessages: {
@@ -101,7 +101,7 @@ export default {
         },
 
         // Send Message
-        async addMessage(userId) 
+        async addMessage(email) 
         {
             this.loading = true
 
@@ -125,7 +125,7 @@ export default {
             // For Message in Firestore
             await setDoc(messageRef, {
                 text: this.message,
-                sender: userId,
+                sender: email,
                 createdAt: Date.now(),
                 audioURL,
             })
@@ -192,7 +192,7 @@ export default {
             msgContainer.scrollTo(0, msgContainer.scrollHeight)
 
             msgContainer.classList.remove('smooth-scroll')
-        }
+        },
 
     }
 }

@@ -5,13 +5,19 @@
 
         <audio v-if="message.audioURL" :src="message.audioURL" controls></audio>
     
-        <span class="sender">from UID {{ message.sender }}</span>
+        <span class="sender">from {{ userName }}</span>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['message', 'owner']
+        props: ['message', 'owner'],
+        computed: {
+            userName () {
+                const email = this.message.sender
+                return email.slice(0,email.indexOf('@'))
+            }
+        }
     }
 </script>
 
