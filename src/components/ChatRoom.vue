@@ -5,7 +5,8 @@
     <UserComponent >
         <template #userrr="{ user }">
 
-            <ul>
+            <ul ref="container">
+                <button class="button" @click="loadMore()">Load more messages...</button>
                 <li v-for="message of messages" :key="message.id">
                     <ChatMessage :message="message" :owner="message.sender === user?.uid"/>
                 </li>
@@ -53,6 +54,7 @@ export default {
             messages: [], // for realtime data fetching
             newAudio: null,
             recorder: null,
+            numberOfMessages: 10,
         }
     },
     computed: {
@@ -67,17 +69,26 @@ export default {
             return URL.createObjectURL(this.newAudio)
         }
     },
-    // Realtime Data fetching using VueFire
     watch: {
-        chatId: {
-            immediate: true,
-            handler(chatId) {
-                const collectionRef =  collection(db, 'chats', chatId, 'messages')
-                this.$firestoreBind('messages', query(collectionRef, orderBy('createdAt'), limitToLast(10)))
-            }
-        }
+        numberOfMessages: {
+            handler() {
+                this.fetchMessages(this.chatId)
+            },
+        },
+    },
+    mounted() {
+        this.fetchMessages(this.chatId)
+            .then(() => this.displayLastMessage())
     },
     methods: {
+        // Fetch Messages
+        async fetchMessages(chatId) {
+            const collectionRef =  collection(db, 'chats', chatId, 'messages')
+            // Realtime data stream using VueFire
+            return this.$firestoreBind('messages', query(collectionRef, orderBy('createdAt'), limitToLast(this.numberOfMessages)))
+        },
+
+        // Send Message
         async addMessage(userId) 
         {
             this.loading = true
@@ -107,12 +118,14 @@ export default {
                 audioURL,
             })
 
+            this.displayLastMessage()
 
             this.loading = false
             this.message = ''
             this.newAudio = null
         },
 
+        // Start Recording audio
         async record () {
             this.newAudio = null
 
@@ -140,15 +153,27 @@ export default {
             this.recorder.start()
         },
 
+        // Stop Recording audio
         async stop() {
             this.recorder.stop()
             this.recorder = null
+        },
+
+        // Load more messages
+        loadMore() {
+            this.numberOfMessages += 10
+        },
+
+        displayLastMessage () {
+            const msgContainer = this.$refs.container
+            msgContainer.scrollTo(0, msgContainer.scrollHeight)
         }
+
     }
 }
 </script>
 
-<style>
+<style scoped>
 ul {
   list-style-type: none;
   margin: 0;
@@ -158,6 +183,9 @@ ul {
   min-width: 500px;
   background: #efefef;
   border-radius: 0;
+  height: 500px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 li {
