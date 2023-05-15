@@ -1,24 +1,32 @@
 <template>
     <label for="roomid">Enter chat room code to join</label>
     <input type="text" id="roomid" v-model="roomid">
+
     <button
         class="button is-info"
         @click="joinRoom()"
     >
         Join
     </button>
+
+    <p v-if="errorMsg" class="has-text-danger">{{ errorMsg }}</p>
 </template>
 
 <script>
 export default {
     data () {
         return {
-            roomid: ''
+            roomid: '',
+            errorMsg: '',
         }
     },
     methods: {
         joinRoom() {
-            this.$router.push({ name: 'chat', params: {id: this.roomid}})
+            if (!this.roomid) {
+                this.errorMsg = 'Please enter valid Room ID'
+            } else {
+                this.$router.push({ name: 'chat', params: {id: this.roomid}})
+            }
         }
     }
 }
