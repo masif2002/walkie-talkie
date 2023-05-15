@@ -1,6 +1,13 @@
 <template>
-    <p>Welcome to chat room <strong>{{ chatId }}</strong></p>
-    <p>Use this link to join the ChatRoom: <pre>{{ chatRoomURL }}</pre></p>
+    <p>Welcome to chat room. Room code to join: </p>
+    
+    <div class="flex">
+        <pre ref="roomid">{{ chatId }}</pre>
+    
+        <button class="button" @click="copyRoomId()">
+            Copy RoomId
+        </button>
+    </div>
 
     <UserComponent >
         <template #userrr="{ user }">
@@ -194,6 +201,12 @@ export default {
             msgContainer.classList.remove('smooth-scroll')
         },
 
+        copyRoomId() {
+            const roomId = this.$refs.roomid.textContent
+            navigator.clipboard.writeText(roomId)
+            alert("Room Id copied to clipboard")
+        },
+
     }
 }
 </script>
@@ -216,7 +229,16 @@ li {
   display: flex;
 }
 
+pre {
+    width: 400px;
+    padding: 20px;
+}
+
 .smooth-scroll {
     scroll-behavior: smooth;
+}
+
+.flex {
+    display: flex;
 }
 </style>
