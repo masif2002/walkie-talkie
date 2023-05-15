@@ -6,12 +6,13 @@ import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 import HomeComponent from './components/HomeComponent'
 import ChatRoom from './components/ChatRoom'
 
-import { firebaseApp, auth } from './firebase'
-import { roomExists } from './utils'
+import { firebaseApp,  } from './firebase'
+import { checkUserExists, roomExists } from './utils'
 
-import ToastPlugin from 'vue-toast-notification';
+import ToastPlugin, { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 
+const toast = useToast()
 
 const routes = [
     { 
@@ -25,13 +26,16 @@ const routes = [
         name: 'chat',
         beforeEnter: async (to) => {
             // Check if User is logged in 
-            auth.onAuthStateChanged(function (user) {
-                if (!user) return { name: 'home' }
-            })
+            let user = await checkUserExists()
+            if (!user) {
+                toast.default('You need to be logged in')
+                return { name: 'home' }
+            }
             
             // Check if Room with the ID exists
             const room = await roomExists(to.params.id)  
             if (!room) {
+                toast.error('Room does not exist!')
                 return { name: 'home' }
             }    
         }
