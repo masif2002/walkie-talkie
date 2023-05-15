@@ -101,7 +101,7 @@ export default {
     },
     methods: {
         // Fetch Messages
-        async fetchMessages(chatId) {9999
+        async fetchMessages(chatId) {
             const collectionRef =  collection(db, 'chats', chatId, 'messages')
 
             // Realtime data stream using VueFire
@@ -111,6 +111,12 @@ export default {
         // Send Message
         async addMessage(email) 
         {
+            // If logged in as anonymous user
+            if(!email) {
+                this.$toast.error('Must be a registered user to send messages')
+                return 
+            }
+
             this.loading = true
 
             const collectionRef = collection(db, 'chats', this.chatId, 'messages')

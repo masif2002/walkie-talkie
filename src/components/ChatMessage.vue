@@ -14,8 +14,8 @@
         props: ['message', 'owner'],
         computed: {
             userName () {
-                const email = this.message.sender
-                return email.slice(0,email.indexOf('@'))
+                const email = this.message?.sender
+                return email?.slice(0,email.indexOf('@'))
             }
         }
     }
