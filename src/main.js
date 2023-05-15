@@ -9,6 +9,9 @@ import ChatRoom from './components/ChatRoom'
 import { firebaseApp, auth } from './firebase'
 import { roomExists } from './utils'
 
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
+
 
 const routes = [
     { 
@@ -21,13 +24,14 @@ const routes = [
         component: ChatRoom, 
         name: 'chat',
         beforeEnter: async (to) => {
+            // Check if User is logged in 
             auth.onAuthStateChanged(function (user) {
                 if (!user) return { name: 'home' }
             })
             
+            // Check if Room with the ID exists
             const room = await roomExists(to.params.id)  
             if (!room) {
-                alert('Incorrect Room ID')
                 return { name: 'home' }
             }    
         }
@@ -50,6 +54,9 @@ app.use(VueFire, {
         VueFireFirestoreOptionsAPI()
     ]
 })
+
+// Toast Notification Plugin
+app.use(ToastPlugin);
 
 app.use(router)
 

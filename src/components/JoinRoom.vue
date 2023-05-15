@@ -9,7 +9,6 @@
         Join
     </button>
 
-    <p v-if="errorMsg" class="has-text-danger">{{ errorMsg }}</p>
 </template>
 
 <script>
@@ -23,7 +22,7 @@ export default {
     methods: {
         joinRoom() {
             if (!this.roomid) {
-                this.errorMsg = 'Please enter valid Room ID'
+                this.$toast.error('Please enter valid Room ID')
             } else {
                 this.$router.push({ name: 'chat', params: {id: this.roomid}})
             }

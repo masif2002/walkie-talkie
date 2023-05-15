@@ -47,10 +47,11 @@
 <script>
 import UserComponent from './UserComponent.vue'
 import ChatMessage from './ChatMessage.vue'
+
 import { db, storage } from '../firebase'
 import { collection, doc, setDoc, query, orderBy, limitToLast, getCountFromServer } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage'
-// import { ref } from 'firebase/storage'
+
 
 export default {
     components: { UserComponent, ChatMessage },
@@ -204,7 +205,8 @@ export default {
         copyRoomId() {
             const roomId = this.$refs.roomid.textContent
             navigator.clipboard.writeText(roomId)
-            alert("Room Id copied to clipboard")
+
+            this.$toast.success("RoomID copied to clipboard")
         },
 
     }
