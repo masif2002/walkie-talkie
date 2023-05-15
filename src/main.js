@@ -1,6 +1,6 @@
 import App from './App.vue'
 import { createApp } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 
 import HomeComponent from './components/HomeComponent'
@@ -44,7 +44,7 @@ const routes = [
 
 // Router Set Up
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes
 })
 
