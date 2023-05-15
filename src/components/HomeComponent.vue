@@ -1,17 +1,18 @@
 <template>
-    <h1>Home Page</h1>
-    <UserComponent>
-        <!-- this template is passed as a child to UserComponent -->
-        <template #userrr="{ user }">
-            
-            <UserProfile v-if="user" :user="user" />
-            <LoginComponent v-else />
-
-            <ChatList :userId="user.uid" v-if="user"/>
-
-        </template>
-
-    </UserComponent> 
+    <section class="is-flex is-align-items-center is-justify-content-center" id="home">
+        <UserComponent>
+            <!-- this template is passed as a child to UserComponent -->
+            <template #userrr="{ user }">
+                
+                <UserProfile v-if="user" :user="user" />
+                <LoginComponent v-else />
+    
+                <ChatList :userId="user.uid" v-if="user"/>
+    
+            </template>
+    
+        </UserComponent> 
+    </section>
 </template>
 
 <script>
@@ -32,3 +33,10 @@ export default {
 
 // JS
 </script>
+
+<style scoped>
+#home {
+    height: 80vh;
+}
+
+</style>

@@ -1,21 +1,25 @@
 <template>
-  <header>
-    <h1>Walkie Talkie</h1>
-    <h3>Mic Check.. Over.. Overr</h3>
-  </header>
+  <NavBar />
 
   <router-view></router-view>
 </template>
 
 <script>
+import NavBar from './components/NavBar';
 
 export default {
   name: 'App',
   components: {
+    NavBar
   }
 }
 </script>
 
 <style>
+body {
+  background-color: black;
+  min-height: 100vh;
+}
+
 
 </style>

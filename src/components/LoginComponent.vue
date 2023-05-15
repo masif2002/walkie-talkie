@@ -1,35 +1,61 @@
 <template>
 <!-- HTML -->
-<aside>
 
+    <section class="is-flex is-flex-direction-column is-align-items-center">
+        
+        <div class="field mb-5">
+            <p class="control has-icons-left">
+                <input type="email" id="email" v-model="email" class="input is-medium is-primary has-background-black-bis has-text-white-bis" placeholder="Email">
+                <span class="icon is-small is-left">
+                    <i class="fa fa-envelope"></i>
+                </span>
+            </p>
+        </div>
     
-    <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" class="input" >
-    </div>
+        <div class="field mb-5">
+            <p class="control has-icons-left">
+                <input type="password" id="password" v-model="password" class="input input is-medium is-primary has-background-black-bis has-text-white-bis" placeholder="Password">
+                <span class="icon is-left">
+                    <i class="fa fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        
+        <div class="is-flex is-flex-direction-column is-align-items-center">
+            <button 
+                @click="signInOrCreateUser()"
+                class="button is-primary mt-5"
+                :class="{'is-loading': loading}"
+                >
+                {{ newUser ? 'Register' : 'Login' }}
+            </button>
 
-    <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" class="input" >
-    </div>
-    
-    <div>
-        <a v-if="newUser" @click="newUser=false">Already have an account? Login</a>
-        <a v-else @click="newUser=true" >New user? Register here </a>
-    </div>
-    
-    <button 
-        @click="signInOrCreateUser()"
-        class="button is-info"
-        :class="{'is-loading': loading}"
-        >
-        {{ newUser ? 'Register' : 'Login' }}
-    </button>
-    <button @click="signInAnonymously(auth)" class="button">Login as a Guest</button>
+            <div class="choice">
+                <p class="has-text-white seperator">OR</p>
+                <p class="has-text-grey line">________________________________________________________________________________________</p>
+            </div>
 
-    <p v-if="errMessage" class="has-text-danger">{{ errMessage }}</p>
+            <button 
+                @click="anonymousSignIn()"
+                class="button is-primary is-inverted has-background-black-bis  mt-5"
+                :class="{'is-loading': anonymousLoginLoading}"
+            >
+                Login as a Guest
+            </button>
 
-</aside>    
+        </div>
+
+        <div class="login-state mt-6">
+            <h3 v-if="newUser" class="has-text-white">
+                Already have an account? <span class="has-text-primary is-clickable" @click="newUser=false" >Login</span>
+            </h3>
+            <h3 v-else class="has-text-white">
+                New to walkie talkie? <span class="has-text-primary is-clickable" @click="newUser=true" >Register</span> 
+            </h3>
+        </div>
+        <p v-if="errMessage" class="has-text-danger">{{ errMessage }}</p>
+    </section>    
+
 <!-- HTML -->
 </template>
 
@@ -47,7 +73,8 @@ export default {
             password:'',
             newUser: false,
             errMessage: '',
-            loading: false
+            loading: false,
+            anonymousLoginLoading: false
         }
     },
     methods: {
@@ -59,14 +86,76 @@ export default {
                     await signInWithEmailAndPassword(auth, this.email, this.password)
 
             } catch (err) {
-                this.errMessage = err.code
-                console.log(err);
+                this.$toast.error(err.code)
             }
 
             this.loading = false
+        },
+
+        async anonymousSignIn() {
+            this.anonymousLoginLoading = true
+
+            try {
+                await signInAnonymously(auth)
+            } catch (err) {
+                this.$toast.error(err.code)
+            }
+
+            this.anonymousLoginLoading = false
         }
 
     }
 }
 // JS
 </script>
+
+<style scoped>
+* {
+  margin: 0px;
+}
+
+input, .btn-container {
+    width: 400px;
+}
+
+input {
+    filter: drop-shadow(0 24px 14px rgba(255, 255, 255, 0.03)) drop-shadow(0 10px 8px rgba(255, 255, 255, 0.08))
+}
+
+::-webkit-input-placeholder {
+  color: hsl(0, 0%, 48%)
+}
+
+.login-state span:hover{
+    opacity: 60%;
+}
+
+.login-state h3 {
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.choice {
+    height: 80px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.line {
+    margin-top: -69px;
+    position: relative;
+    z-index: 10;
+}
+
+.seperator {
+    background-color: black;
+    position: relative;
+    z-index: 20;
+    padding: 20px;
+}
+
+</style>
