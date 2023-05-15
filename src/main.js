@@ -21,7 +21,9 @@ const routes = [
         component: ChatRoom, 
         name: 'chat',
         beforeEnter: async (to) => {
-            if (!auth.currentUser) return { name: 'home' }
+            auth.onAuthStateChanged(function (user) {
+                if (!user) return { name: 'home' }
+            })
             
             const room = await roomExists(to.params.id)  
             if (!room) {
