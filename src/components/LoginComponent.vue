@@ -1,7 +1,7 @@
 <template>
 <!-- HTML -->
 
-    <section class="is-flex is-flex-direction-column is-align-items-center">
+    <section class="is-flex is-flex-direction-column is-align-items-center ">
         
         <div class="field mb-5">
             <p class="control has-icons-left">
@@ -110,6 +110,10 @@ export default {
 <style scoped>
 * {
   margin: 0px;
+}
+
+section {
+    min-height: 80vh;
 }
 
 input, .btn-container {

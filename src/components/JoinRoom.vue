@@ -1,14 +1,19 @@
 <template>
-    <label for="roomid">Enter chat room code to join</label>
-    <input type="text" id="roomid" v-model="roomid">
+    <div class="is-flex is-justify-content-center w-full mb-6">
+        
+        <div class="field has-addons">
+            <div class="control">
+                <input type="text" class="input is-active is-primary has-background-black-ter has-text-white
+                " placeholder="Enter Room ID">
+            </div>
+            <div class="control">
+                <button class="button is-primary" @click="joinRoom()">
+                    Join Room
+                </button>
+            </div>
+        </div>
 
-    <button
-        class="button is-info"
-        @click="joinRoom()"
-    >
-        Join
-    </button>
-
+    </div>
 </template>
 
 <script>
@@ -30,3 +35,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+::-webkit-input-placeholder {
+    color: hsl(0, 0%, 51%);
+}
+
+
+
+</style>

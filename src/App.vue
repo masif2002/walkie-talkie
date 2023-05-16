@@ -16,10 +16,13 @@ export default {
 </script>
 
 <style>
-body {
+body, html {
   background-color: black;
   min-height: 100vh;
 }
 
+.w-full {
+    width: 100%;
+}
 
 </style>

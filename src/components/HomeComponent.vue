@@ -1,5 +1,5 @@
 <template>
-    <section class="is-flex is-align-items-center is-justify-content-center" id="home">
+    <section>
         <UserComponent>
             <!-- this template is passed as a child to UserComponent -->
             <template #userrr="{ user }">
@@ -30,10 +30,3 @@ export default {
 
 // JS
 </script>
-
-<style scoped>
-#home {
-    height: 80vh;
-}
-
-</style>

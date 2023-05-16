@@ -1,18 +1,27 @@
 <template>
-    <h2>Chat Rooms</h2>
-    <hr>
 
-    <JoinRoom />
+    <section class="is-flex is-flex-direction-column is-align-items-start px-6 mx-6 mb-6">
+        <JoinRoom />
 
-    <ChatRoomList v-if="publicChatRooms" :title="'Public Chat Rooms'" :chatRooms="publicChatRooms"/>
-
-    <ChatRoomList v-if="chats" :title="`${userId}'s chat rooms`" :chatRooms="chats">
-
-        <template #create-room>
-            <button class="button" @click="createRoom()">Create Room</button>
-        </template>
-
-    </ChatRoomList>
+        <div class="rooms is-flex is-flex-direction-column w-full">
+            <ChatRoomList v-if="publicChatRooms" :title="'Public chat rooms'" :chatRooms="publicChatRooms"/>
+        
+            <ChatRoomList v-if="chats" :title="`Your chat rooms`" :chatRooms="chats">
+        
+                <template #create-room>
+                    <button class="button is-primary is-outlined" @click="createRoom()">
+                        <span class="icon">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                        <span>
+                            Create Room
+                        </span>
+                    </button>
+                </template>
+        
+            </ChatRoomList>
+        </div>
+    </section>
 
 
 </template>
@@ -63,3 +72,14 @@ export default {
 }
 
 </script>
+
+<style scoped>
+section {
+    min-height: 80vh;
+    margin-top: 80px;
+}
+
+.rooms {
+    gap: 40px
+}
+</style>
