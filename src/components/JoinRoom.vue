@@ -4,7 +4,7 @@
         <div class="field has-addons">
             <div class="control">
                 <input type="text" class="input is-active is-primary has-background-black-ter has-text-white
-                " placeholder="Enter Room ID">
+                " placeholder="Enter Room ID" v-model="roomid">
             </div>
             <div class="control">
                 <button class="button is-primary" @click="joinRoom()">

@@ -1,47 +1,90 @@
 <template>
-    <p>Welcome to chat room. Room code to join: </p>
     
-    <div class="flex">
-        <pre ref="roomid">{{ chatId }}</pre>
+    <section class="container">
+
+        <div class="has-text-white is-flex w-full is-justify-content-center">
+            
+            <h4 class="is-uppercase has-text-white roomid">Room Id: </h4>
+            <h4 ref="roomid" class="has-text-primary">{{ chatId }}</h4>
     
-        <button class="button" @click="copyRoomId()">
-            Copy RoomId
-        </button>
-    </div>
+            <span class="icon is-clickable has-text-grey-light ml-1"  @click="copyRoomId()">
+                <i class="fa fa-copy"></i>
+            </span>
+    
+        </div>
+    
+        <UserComponent >
+            <template #userrr="{ user }">
+                
+                <!-- Read All Messages -->
+                <ul ref="container" class="has-background-black-bis">
+                    <div class="is-flex is-justify-content-center">
+                        <span class="icon is-clickable chevron" @click="loadMore()" v-if="!noMoreMessages">
+                            <i class="fa fa-2x fa-chevron-up"></i>
+                        </span>
+                    </div>
+                    
+                    <li v-for="message of messages" :key="message.id">
+                        <ChatMessage :message="message" :owner="message.sender === user?.email"/>
+                    </li>
+                </ul>
+                
+                <!-- Send Text Message -->
+                <div class="field has-addons">
+                    <div class="control w-full ">
+                        <input class="p-5 input has-text-primary is-primary is-inverted" type="text" v-model="message" placeholder="Enter message ..." />
+                    </div>
+                    <div class="control">
+                        <button 
+                            class="button is-success p-5"
+                            @click="addMessage(user?.email)"
+                            :disabled = "(!message && !newAudio) || loading"
+                            :class = "{ 'is-loading' : loading }"
+                        >
+                            <span class="icon is-medium">
+                                <i class="fa fa fa-paper-plane"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- OR -->
+                <div class="choice">
+                    <p class="has-text-white seperator">OR</p>
+                    <p class="has-text-grey line">________________________________________________________________________________________</p>
+                </div>
+                
+                <!-- Send Audio Message-->
+                <div class="field has-addons is-flex is-justify-content-center mt-5">
 
-    <UserComponent >
-        <template #userrr="{ user }">
+                    <div class="control">
+                        <audio v-if="newAudio" :src="newAudioURL" class=" is-primary" controls></audio>
+                        <input v-else type="text" value="Send a voice message" class="input p-5 has-text-grey-lighter is-primary w-400" readonly>
+                    </div>
 
-            <ul ref="container">
-                <button class="button" @click="loadMore()" v-if="!noMoreMessages">Load more messages...</button>
-                <li v-for="message of messages" :key="message.id">
-                    <ChatMessage :message="message" :owner="message.sender === user?.email"/>
-                </li>
-            </ul>
+                    <div class="control">
+                        <button class="button is-primary p-5 " @click="handleVoice()">
+                            
+                            <span class="icon" v-if="!recorder">
+                                <i class="fa fa-microphone"></i>
+                            </span>
+                        
+                            <span class="icon" v-else>
+                                <i class="fa fa-stop"></i>
+                            </span>
 
-            <input type="text" v-model="message" />
-            <button 
-                class="button is-success"
-                @click="addMessage(user?.email)"
-                :disabled = "(!message && !newAudio) || loading"
-                :class = "{ 'is-loading' : loading }"
-            >
-                Send Message
-            </button>
+                        </button>
+                    </div>
 
-            <h5>Record Audio</h5>
-
-            <button v-if="!recorder" @click="record()" class="button is-info">Record Voice</button>
-            <button v-else @click="stop()" class="button is-danger">Stop</button>
-
-            <br />
-
-            <audio v-if="newAudio" :src="newAudioURL" controls></audio>
-
-            <hr />
-
-        </template>
-    </UserComponent>
+                </div>
+                <br />
+    
+    
+    
+            </template>
+        </UserComponent>
+    </section>
+    
 </template>
 
 <script>
@@ -173,7 +216,6 @@ export default {
 
             this.recorder.addEventListener('stop', () => {
                 this.newAudio = new Blob(recordedChunks);
-                console.log(this.newAudio);
             })
 
             this.recorder.start()
@@ -215,6 +257,16 @@ export default {
             this.$toast.success("RoomID copied to clipboard")
         },
 
+        handleVoice() {
+            if (this.recorder) {
+                this.stop()
+            } else {
+                this.record()
+            }
+
+
+        }
+
     }
 }
 </script>
@@ -227,7 +279,6 @@ ul {
   display: flex;
   flex-direction: column;
   min-width: 500px;
-  background: #efefef;
   border-radius: 0;
   height: 500px;
   overflow-y: scroll;
@@ -237,16 +288,64 @@ li {
   display: flex;
 }
 
-pre {
-    width: 400px;
-    padding: 20px;
+.chevron {
+    color: hsl(0, 0%, 71%)
 }
-
+.chevron:hover {
+    color: hsl(171, 100%, 41%)
+}
 .smooth-scroll {
     scroll-behavior: smooth;
 }
 
-.flex {
-    display: flex;
+.container {
+    margin: 50px auto 100px auto
 }
+
+.roomid {
+    margin-right: 8px;
+}
+
+.content ul:not(:last-child) {
+    margin-bottom: 0;
+}
+
+.input {
+    background-color: black;
+}
+
+::-webkit-input-placeholder {
+    color: hsl(0, 0%, 51%);
+}
+
+.choice {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.line {
+    margin-top: -69px;
+    position: relative;
+    z-index: 10;
+}
+
+.seperator {
+    background-color: black;
+    position: relative;
+    z-index: 20;
+    padding: 20px;
+}
+
+.w-400 {
+    width: 400px
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: hsl(171, 100%, 41%)
+}
+
 </style>

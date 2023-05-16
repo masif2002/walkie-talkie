@@ -5,7 +5,8 @@
 
         <audio v-if="message.audioURL" :src="message.audioURL" controls></audio>
     
-        <span class="sender">from {{ userName }}</span>
+        <span class="sender" v-if="!owner">from <span class="has-text-white-bis">{{ userName }}</span></span>
+        <span class="sender has-text-white-ter" v-else>You</span>
     </div>
 </template>
 
@@ -23,8 +24,8 @@
 
 <style>
 .message {
-    background: #dddddd;
-    color: black;
+    background: black;
+    color: hsl(171, 100%, 41%);
     margin-left: 10px;
     margin-right: auto;
     border-radius: 5px;
@@ -34,9 +35,14 @@
 .from-user {
   margin-right: 10px;
   margin-left: auto;
-  background: #91bbff;
+  background: hsl(171, 100%, 41%);
+  color: black;
 }
+
 .sender {
-  font-size: 0.5rem;
+  font-size: 0.6rem;
+  margin-left: auto;
+  margin-right: 1px;
 }
+
 </style>
