@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { db, auth } from './firebase'
 
@@ -17,3 +18,5 @@ export const checkUserExists = () => {
 
   })
 }
+
+export const signOutUser = () => signOut(auth)

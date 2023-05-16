@@ -26,7 +26,8 @@
                 @click="signInOrCreateUser()"
                 class="button is-primary mt-5"
                 :class="{'is-loading': loading}"
-                >
+                :disabled="loading || anonymousLoginLoading"
+            >
                 {{ newUser ? 'Register' : 'Login' }}
             </button>
 
@@ -39,6 +40,7 @@
                 @click="anonymousSignIn()"
                 class="button is-primary is-inverted has-background-black-bis  mt-5"
                 :class="{'is-loading': anonymousLoginLoading}"
+                :disabled="anonymousLoginLoading || loading"
             >
                 Login as a Guest
             </button>
@@ -53,7 +55,6 @@
                 New to walkie talkie? <span class="has-text-primary is-clickable" @click="newUser=true" >Register</span> 
             </h3>
         </div>
-        <p v-if="errMessage" class="has-text-danger">{{ errMessage }}</p>
     </section>    
 
 <!-- HTML -->
@@ -67,12 +68,9 @@ import { signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPa
 export default {
     data() {
         return { 
-            auth, 
-            signInAnonymously,
             email:'',
             password:'',
             newUser: false,
-            errMessage: '',
             loading: false,
             anonymousLoginLoading: false
         }

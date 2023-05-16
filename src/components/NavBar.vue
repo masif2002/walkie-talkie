@@ -9,7 +9,7 @@
 
         </router-link>
         
-        <div class="is-flex is-align-items-center">
+        <div class="is-flex is-align-items-center" v-if="user">
             <p class="has-text-white">Logged in as 
                 <span class="has-text-primary">{{ user?.email ?? user?.uid }}</span>
             </p>
