@@ -2,7 +2,7 @@
     <!-- HTML -->
 
     <div >
-        <slot name="userrr" :user="firebaseUser"></slot>
+        <slot name="userrr" :user="user"></slot>
     </div>
 
     <!-- HTML -->
@@ -10,29 +10,22 @@
 
 <script>
 // JS
-
-import { auth} from '../firebase'
-import { onAuthStateChanged } from 'firebase/auth'
-import { ref } from 'vue'
+import { useUser } from '../user'
 
 export default {
-    setup() {
+    data() {
 
-            const firebaseUser = ref(null)
-            const unsubscribe = onAuthStateChanged(auth, 
-                user => firebaseUser.value = user
-            )
+            const fbUser = useUser()
 
             return {
-                firebaseUser,
-                unsubscribe
+                user: fbUser.user,
             }
         
 
     },
     
     unmounted() {
-        this.unsubscribe()
+        this.fbUser?.unsubscribe()
     }
 
    

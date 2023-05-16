@@ -8,13 +8,34 @@
             </div>
 
         </router-link>
-        <p class="has-text-white is-clickable">Login</p>
+        
+        <div class="is-flex is-align-items-center">
+            <p class="has-text-white">Logged in as 
+                <span class="has-text-primary">{{ user?.email ?? user?.uid }}</span>
+            </p>
+            <span class="icon is-medium has-text-white is-clickable" @click="signOutUser()">
+                <i class="fa fa-lg fa-sign-out"></i>
+            </span>
+        </div>
     </nav>
 </template>
 
 <script>
-export default {
+import { signOutUser } from '../utils';
+import { useUser } from '../user';
 
+export default {
+    data() {
+        const fbUser = useUser()
+
+        return {
+            user: fbUser.user,
+            signOutUser
+        }
+    },
+    unmounted() {
+        this.fbUser?.unsubscribe()
+    }
 }
 </script>
 
@@ -33,4 +54,14 @@ p:hover {
     margin-right: -2px;
     margin-bottom: -6px;
 }
+
+.content p:not(:last-child) {
+    margin-bottom: 0;
+    margin-right: 25px;
+}
+
+.icon:hover {
+    opacity: 60%;
+}
+
 </style>
