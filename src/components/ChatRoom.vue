@@ -13,106 +13,105 @@
     
         </div>
     
-        <UserComponent >
-            <template #userrr="{ user }">
-                
-                <!-- Read All Messages -->
-                <ul ref="container" class="has-background-black-bis">
-                    <div class="is-flex is-justify-content-center">
-                        <span class="icon is-clickable chevron" @click="loadMore()" v-if="!noMoreMessages">
-                            <i class="fa fa-2x fa-chevron-up"></i>
-                        </span>
-                    </div>
-                    
-                    <li v-for="message of messages" :key="message.id">
-                        <ChatMessage :message="message" :owner="message.sender === user?.email"/>
-                    </li>
-                </ul>
-                
-                <!-- Send Text Message -->
-                <div class="field has-addons">
-                    <div class="control w-full ">
-                        <input class="p-5 input has-text-primary is-primary is-inverted" type="text" v-model="message" placeholder="Enter message ..." />
-                    </div>
-                    <div class="control">
-                        <button 
-                            class="button is-success p-5"
-                            @click="addMessage(user?.email)"
-                            :disabled = "(!message && !newAudio) || loading"
-                            :class = "{ 'is-loading' : loading }"
-                        >
-                            <span class="icon is-medium">
-                                <i class="fa fa fa-paper-plane"></i>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- OR -->
-                <div class="choice">
-                    <p class="has-text-white seperator">OR</p>
-                    <p class="has-text-grey line">________________________________________________________________________________________</p>
-                </div>
-                
-                <!-- Send Audio Message-->
-                <div class="field has-addons is-flex is-justify-content-center mt-5">
-
-                    <div class="control">
-
-                        <div v-if="newAudio" class="audio-bg audio-height">
-                            <audio :src="newAudioURL" controls></audio>
-                        </div>
-
-                        <input v-else type="text" :value="inputMsg" class="input p-5 has-text-grey-lighter is-primary w-400 audio-height" readonly>
-                    </div>
-
-                    <div class="control">
-                        <button class="button is-primary p-5  audio-height" @click="handleVoice()">
-                            
-                            <span class="icon" v-if="!recorder">
-                                <i v-if="!newAudio" class="fa fa-microphone"></i>
-                                <i v-else class="fa fa-paper-plane"></i>
-                            </span>
-                        
-                            <span class="icon" v-else>
-                                <i class="fa fa-stop"></i>
-                            </span>
-
-                        </button>
-                    </div>
-
-                </div>
-
-                <p v-if="newAudio" class="is-flex is-justify-content-center w-full has-text-grey-light is-clickable"
-                    @click="handleVoice()"
+        <!-- Read All Messages -->
+        <ul ref="container" class="has-background-black-bis">
+            <div class="is-flex is-justify-content-center">
+                <span class="icon is-clickable chevron" @click="loadMore()" v-if="!noMoreMessages">
+                    <i class="fa fa-2x fa-chevron-up"></i>
+                </span>
+            </div>
+            
+            <li v-for="message of messages" :key="message.id">
+                <ChatMessage :message="message" :owner="message.sender === user?.email"/>
+            </li>
+        </ul>
+        
+        <!-- Send Text Message -->
+        <div class="field has-addons">
+            <div class="control w-full ">
+                <input class="p-5 input has-text-primary is-primary is-inverted" type="text" v-model="message" placeholder="Enter message ..." />
+            </div>
+            <div class="control">
+                <button 
+                    class="button is-primary p-5"
+                    @click="addMessage(user?.email)"
+                    :disabled = "(!message && !newAudio) || loading"
+                    :class = "{ 'is-loading' : loading }"
                 >
-                    Record Again 
-                    <span class="icon has-text-primary">
-                        <i class="fa fa-undo"></i>
+                    <span class="icon is-medium">
+                        <i class="fa fa fa-paper-plane"></i>
                     </span>
-                </p>
-    
-    
-    
-            </template>
-        </UserComponent>
+                </button>
+            </div>
+        </div>
+        
+        <!-- OR -->
+        <div class="choice">
+            <p class="has-text-white seperator">OR</p>
+            <p class="has-text-grey line">________________________________________________________________________________________</p>
+        </div>
+        
+        <!-- Send Audio Message-->
+        <div class="field has-addons is-flex is-justify-content-center mt-5">
+
+            <div class="control">
+
+                <div v-if="newAudio" class="audio-bg audio-height">
+                    <audio :src="newAudioURL" controls></audio>
+                </div>
+
+                <input v-else type="text" :value="inputMsg" class="input p-5 has-text-grey-lighter is-primary w-400 audio-height" readonly>
+            </div>
+
+            <div class="control">
+                <button 
+                    class="button is-primary p-5  audio-height"  
+                    @click="handleVoice()"
+                    :class = "{ 'is-loading' : loading }"
+                >
+                    
+                    <span class="icon" v-if="!recorder">
+                        <i v-if="!newAudio" class="fa fa-microphone w-full h-full"></i>
+                        <i v-else class="fa fa-paper-plane"></i>
+                    </span>
+                
+                    <span class="icon" v-else>
+                        <i class="fa fa-stop"></i>
+                    </span>
+
+                </button>
+            </div>
+
+        </div>
+
+        <p v-if="newAudio" class="is-flex is-justify-content-center w-full has-text-grey-light is-clickable"
+            @click="record()"
+        >
+            Record Again 
+            <span class="icon has-text-primary">
+                <i class="fa fa-undo"></i>
+            </span>
+        </p>
+ 
     </section>
     
 </template>
 
 <script>
-import UserComponent from './UserComponent.vue'
 import ChatMessage from './ChatMessage.vue'
 
 import { db, storage } from '../firebase'
 import { collection, doc, setDoc, query, orderBy, limitToLast, getCountFromServer } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage'
+import { useUser } from '../user'
 
 
 export default {
-    components: { UserComponent, ChatMessage },
+    components: { ChatMessage },
     data () {
+        const fbUser = useUser()
         return {
+            user: fbUser.user,
             message: '',
             loading: false,
             messages: [], // for realtime data fetching
@@ -120,7 +119,7 @@ export default {
             recorder: null,
             numberOfMessages: 10,
             totalMessages: 0,
-            inputMsg: 'Send a voice message'
+            inputMsg: 'Send a voice message ...'
         }
     },
     computed: {
@@ -155,6 +154,9 @@ export default {
 
         this.fetchMessages(this.chatId)
             .then(() => this.displayLastMessage())
+    },
+    unmounted() {
+        this.fbUser?.unsubscribe()
     },
     methods: {
         // Fetch Messages
@@ -211,6 +213,8 @@ export default {
         // Start Recording audio
         async record () {
             this.newAudio = null
+            this.inputMsg = 'Recording ...'
+
 
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
@@ -272,11 +276,17 @@ export default {
         },
 
         handleVoice() {
+            // Stop Recording icon 
             if (this.recorder) {
-                this.inputMsg = 'Send a voice message'
                 this.stop()
-            } else {
-                this.inputMsg = 'Recording ...'
+            } 
+            // Send message icon
+            else if (!this.recorder && this.newAudio) {
+                this.addMessage(this.user?.email)
+            
+            } 
+            // Microphone icon
+            else if (!this.recorder && !this.newAudio) {
                 this.record()
             }
 
