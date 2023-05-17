@@ -34,7 +34,7 @@ import ChatRoomList from './ChatRoomList.vue'
 import JoinRoom from './JoinRoom.vue'
 
 export default {
-    props: ['userId'],
+    props: ['user'],
     components: {
         ChatRoomList,
         JoinRoom
@@ -45,25 +45,27 @@ export default {
     }},
     // Realtime Data fetching using VueFire
     watch: {
-        // Waits until UserId is received from the parent component
-        userId: {
+        // Waits until user is received from the parent component
+        user: {
             immediate: true,
-            handler(userId) {
-                this.$firestoreBind('chats', query(collection(db, 'chats'), where('owner', '==', userId)))
+            handler(user) {
+                this.$firestoreBind('chats', query(collection(db, 'chats'), where('owner', '==', user?.uid)))
             }
         }
     },
-    // Realtime data fetching with vueFire but without any dependency (like userId for 'chats')
+    // Realtime data fetching with vueFire but without any dependency (like user for 'chats')
     firestore: {
         publicChatRooms: query(collection(db, 'chats'), where('public', '==', true))
     },
     methods: {
         async createRoom() {
-            
+            if (!this.user?.email) {
+                return this.$toast.error('Must be a registered user to create rooms')
+            }
             await addDoc(collection(db, 'chats'), {
                 createdAt: Date.now(),
-                owner: this.userId,
-                members: [this.userId],
+                owner: this.user?.uid,
+                members: [this.user?.uid],
                 public: false
             })
 

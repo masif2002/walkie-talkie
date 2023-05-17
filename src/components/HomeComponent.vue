@@ -4,7 +4,7 @@
             <!-- this template is passed as a child to UserComponent -->
             <template #userrr="{ user }">
                 
-                <ChatList :userId="user.uid" v-if="user"/>
+                <ChatList :user="user" v-if="user"/>
     
             </template>
     
