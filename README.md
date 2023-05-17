@@ -1,24 +1,23 @@
-# walkie-talkie
+# Walkie Talkie
+**[Walkie Talkie](https://walkie-talkie-asif.web.app/)** is a real-time chat application built on **Vue** and **Firebase**
+
+## Dev Stack
+* **Vue** as the frontend framework
+* **[Bulma](https://bulma.io/)**, a CSS framework for styling
+* **Firebase** for authentication and hosting 
+* **Firestore** for database
 
 ## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1. Clone the project
+    ```
+    git clone https://github.com/masif2002/walkie-talkie.git
+    ```
+1. Install Dependencies
+    ```
+    npm install
+    ```
+1. Start the local server
+    ```
+    npm run serve
+    ```
