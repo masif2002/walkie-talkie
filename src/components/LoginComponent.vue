@@ -82,6 +82,8 @@ export default {
                 this.newUser ? 
                     await createUserWithEmailAndPassword(auth,  this.email, this.password) : 
                     await signInWithEmailAndPassword(auth, this.email, this.password)
+                
+                    this.$router.push({name: 'home'})
 
             } catch (err) {
                 this.$toast.error(err.code)
@@ -95,6 +97,8 @@ export default {
 
             try {
                 await signInAnonymously(auth)
+
+                this.$router.push({name: 'home'})
             } catch (err) {
                 this.$toast.error(err.code)
             }

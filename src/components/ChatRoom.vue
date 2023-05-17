@@ -71,7 +71,7 @@
                 >
                     
                     <span class="icon" v-if="!recorder">
-                        <i v-if="!newAudio" class="fa fa-microphone w-full h-full"></i>
+                        <i v-if="!newAudio" class="fa fa-microphone"></i>
                         <i v-else class="fa fa-paper-plane"></i>
                     </span>
                 

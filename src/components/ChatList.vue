@@ -59,14 +59,14 @@ export default {
     },
     methods: {
         async createRoom() {
-            const newRoom = await addDoc(collection(db, 'chats'), {
+            
+            await addDoc(collection(db, 'chats'), {
                 createdAt: Date.now(),
                 owner: this.userId,
                 members: [this.userId],
                 public: false
             })
 
-            console.log(newRoom);
         }
     }
 }

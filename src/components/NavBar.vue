@@ -21,8 +21,10 @@
 </template>
 
 <script>
-import { signOutUser } from '../utils';
+import { auth } from '../firebase'
+import { signOut } from 'firebase/auth'
 import { useUser } from '../user';
+
 
 export default {
     data() {
@@ -30,7 +32,13 @@ export default {
 
         return {
             user: fbUser.user,
-            signOutUser
+        }
+    },
+    methods: {
+        signOutUser () {
+            signOut(auth)
+                .then(() => this.$router.push({'name': 'login'}))
+            
         }
     },
     unmounted() {

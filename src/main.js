@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { VueFire, VueFireFirestoreOptionsAPI } from 'vuefire'
 
 import HomeComponent from './components/HomeComponent'
+import LoginComponent from './components/LoginComponent'
 import ChatRoom from './components/ChatRoom'
 
 import { firebaseApp,  } from './firebase'
@@ -18,7 +19,26 @@ const routes = [
     { 
         path: '/', 
         component: HomeComponent,
-        name: 'home'
+        name: 'home',
+        beforeEnter: async () => {
+            // Check if User is logged in 
+            let user = await checkUserExists()
+            if (!user) {
+                toast.default('You must be logged in')
+                return { name: 'login' }
+            }
+        }
+    },
+    { 
+        path: '/login', 
+        component: LoginComponent,
+        name: 'login',
+        beforeEnter: async () => {
+            let user = await checkUserExists()
+            if (user) {
+                return { 'name': 'home'}
+            }
+        }
     },
     { 
         path: '/chat/:id', 
@@ -28,8 +48,8 @@ const routes = [
             // Check if User is logged in 
             let user = await checkUserExists()
             if (!user) {
-                toast.default('You need to be logged in')
-                return { name: 'home' }
+                toast.default('You must be logged in')
+                return { name: 'login' }
             }
             
             // Check if Room with the ID exists
