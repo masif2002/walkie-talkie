@@ -24,19 +24,21 @@
 
 <style>
 .message {
+    min-width: 58px;
     background: black;
     color: hsl(171, 100%, 41%);
     margin-left: 10px;
     margin-right: auto;
-    border-radius: 5px;
+    border-radius: 5px 5px 5px 0px;
     padding: 12px;
     display: inline-block;
 }
 .from-user {
-  margin-right: 10px;
-  margin-left: auto;
-  background: hsl(171, 100%, 41%);
-  color: black;
+    margin-right: 10px;
+    margin-left: auto;
+    background: hsl(171, 100%, 41%);
+    color: black;
+    border-radius: 5px 5px 0px 5px;
 }
 
 .sender {

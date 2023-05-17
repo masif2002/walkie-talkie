@@ -1,7 +1,7 @@
 <template>
 <!-- HTML -->
 
-    <section class="is-flex is-flex-direction-column is-align-items-center ">
+    <section class="is-flex is-flex-direction-column is-align-items-center is-justify-content-center h-full ">
         
         <div class="field mb-5">
             <p class="control has-icons-left">

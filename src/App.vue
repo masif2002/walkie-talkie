@@ -25,4 +25,29 @@ body, html {
     width: 100%;
 }
 
+.h-full {
+  height: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 86%);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  opacity: 60%;
+}
+
 </style>

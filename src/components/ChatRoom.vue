@@ -67,7 +67,7 @@
                 <button 
                     class="button is-primary p-5  audio-height"  
                     @click="handleVoice()"
-                    :class = "{ 'is-loading' : loading }"
+                    :class = "{ 'is-loading' : loading, 'circle': newAudio}"
                 >
                     
                     <span class="icon" v-if="!recorder">
@@ -208,6 +208,7 @@ export default {
             this.loading = false
             this.message = ''
             this.newAudio = null
+            this.inputMsg = 'Send a voice message ...'
         },
 
         // Start Recording audio
@@ -374,6 +375,11 @@ audio::-webkit-media-controls-panel {
     background-color: hsl(0, 0%, 7%)
 }
 
+audio::-webkit-media-controls-play-button {
+    color: hsl(171, 100%, 41%) !important
+
+}
+
 .audio-bg {
     width: 306px;
     border-radius: 50px;
@@ -386,6 +392,10 @@ audio::-webkit-media-controls-panel {
 
 .audio-height {
     height: 60px;
+}
+
+.circle {
+    border-radius: 50% !important;
 }
 
 </style>
