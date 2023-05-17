@@ -58,15 +58,20 @@
                 <div class="field has-addons is-flex is-justify-content-center mt-5">
 
                     <div class="control">
-                        <audio v-if="newAudio" :src="newAudioURL" class=" is-primary" controls></audio>
-                        <input v-else type="text" value="Send a voice message" class="input p-5 has-text-grey-lighter is-primary w-400" readonly>
+
+                        <div v-if="newAudio" class="audio-bg audio-height">
+                            <audio :src="newAudioURL" controls></audio>
+                        </div>
+
+                        <input v-else type="text" :value="inputMsg" class="input p-5 has-text-grey-lighter is-primary w-400 audio-height" readonly>
                     </div>
 
                     <div class="control">
-                        <button class="button is-primary p-5 " @click="handleVoice()">
+                        <button class="button is-primary p-5  audio-height" @click="handleVoice()">
                             
                             <span class="icon" v-if="!recorder">
-                                <i class="fa fa-microphone"></i>
+                                <i v-if="!newAudio" class="fa fa-microphone"></i>
+                                <i v-else class="fa fa-paper-plane"></i>
                             </span>
                         
                             <span class="icon" v-else>
@@ -77,7 +82,15 @@
                     </div>
 
                 </div>
-                <br />
+
+                <p v-if="newAudio" class="is-flex is-justify-content-center w-full has-text-grey-light is-clickable"
+                    @click="handleVoice()"
+                >
+                    Record Again 
+                    <span class="icon has-text-primary">
+                        <i class="fa fa-undo"></i>
+                    </span>
+                </p>
     
     
     
@@ -107,6 +120,7 @@ export default {
             recorder: null,
             numberOfMessages: 10,
             totalMessages: 0,
+            inputMsg: 'Send a voice message'
         }
     },
     computed: {
@@ -259,8 +273,10 @@ export default {
 
         handleVoice() {
             if (this.recorder) {
+                this.inputMsg = 'Send a voice message'
                 this.stop()
             } else {
+                this.inputMsg = 'Recording ...'
                 this.record()
             }
 
@@ -345,7 +361,21 @@ li {
 }
 
 audio::-webkit-media-controls-panel {
-    background-color: hsl(171, 100%, 41%)
+    background-color: hsl(0, 0%, 7%)
+}
+
+.audio-bg {
+    width: 306px;
+    border-radius: 50px;
+    background-color: hsl(171, 100%, 41%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.audio-height {
+    height: 60px;
 }
 
 </style>
