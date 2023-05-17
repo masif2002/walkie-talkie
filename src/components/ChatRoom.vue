@@ -150,8 +150,10 @@ export default {
         },
     },
     mounted() {
+        // Total Number of messages 
         this.getTotalMessages()
-
+        
+        // Fetch actual messages
         this.fetchMessages(this.chatId)
             .then(() => this.displayLastMessage())
     },
