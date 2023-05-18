@@ -148,6 +148,15 @@ export default {
                     .then(() => msgContainer.scrollTop = msgContainer.scrollHeight - initialHeight)
             },
         },
+        messages: {
+            handler() {
+                // Wait for the DOM to update the message, and then scroll to last message
+                this.$nextTick(() => {
+                    this.displayLastMessage()
+                });
+            },
+            deep: true
+        }
     },
     mounted() {
         // Total Number of messages 
